@@ -1,6 +1,6 @@
 ## 前置
 
-必须阅读AGENTS.md文件和AGENT.MD文件
+必须阅读AGENTS.md文件和CLAUDE.md文件
 
 ## 前端编码指南
 
@@ -352,7 +352,8 @@ feature/admin/password_policy
 
 
 15. 包管理器
-yarn
+pnpm
+
 16. 格式化
 Vscode 安装插件 ESlint 和 Prettier - Code formatter
 保存代码时注意执行格式化

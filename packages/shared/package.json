@@ -2,7 +2,15 @@
   "name": "@taskmanager/shared",
   "version": "1.0.0",
   "private": true,
-  "main": "index.ts",
-  "types": "index.ts",
-  "description": "Shared models, DTOs and Enums for TaskManager"
+  "description": "Shared models, DTOs and Enums for TaskManager",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0"
+  }
 }

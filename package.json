@@ -4,10 +4,11 @@
   "private": true,
   "description": "个人任务管理系统 - Monorepo",
   "scripts": {
+    "build:shared": "pnpm --filter @taskmanager/shared build",
     "dev:frontend": "pnpm --filter frontend dev",
-    "dev:backend": "pnpm --filter backend start:dev",
+    "dev:backend": "pnpm run build:shared && pnpm --filter backend start:dev",
     "build:frontend": "pnpm --filter frontend build",
-    "build:backend": "pnpm --filter backend build"
+    "build:backend": "pnpm run build:shared && pnpm --filter backend build"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
