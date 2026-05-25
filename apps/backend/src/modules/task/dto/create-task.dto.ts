@@ -6,7 +6,7 @@ export class CreateTaskDto {
   @IsString()
   @MinLength(1)
   @MaxLength(120)
-  title: string
+  title!: string
 
   @IsOptional()
   @IsString()

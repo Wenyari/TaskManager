@@ -4,7 +4,7 @@ import { TASK_PRIORITY, TASK_STATUS } from '@taskmanager/shared'
 
 export class UpdateTaskDto {
   @IsMongoId()
-  taskId: string
+  taskId!: string
 
   @IsOptional()
   @IsString()
