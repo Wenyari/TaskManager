@@ -1,0 +1,16 @@
+{
+  "name": "task-manager-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "个人任务管理系统 - Monorepo",
+  "scripts": {
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend start:dev",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
+  }
+}

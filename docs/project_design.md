@@ -8,7 +8,7 @@
 **目录结构规划：**
 
 ```text
-my-task-system/
+TaskManager/
 ├── package.json
 ├── pnpm-workspace.yaml
 ├── .nvmrc                   # 锁定 Node.js v20.10.0
