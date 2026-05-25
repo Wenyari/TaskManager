@@ -16,7 +16,7 @@
 |---|---|
 | [1. 工程脚手架](#1-工程脚手架) | 6/7 ✅ |
 | [2. 后端业务](#2-后端业务) | 7/7 ✅ |
-| [3. 前端业务](#3-前端业务) | 0/8 ⬜ |
+| [3. 前端业务](#3-前端业务) | 6/8 ✅ |
 | [4. 数据契约](#4-数据契约) | 2/3 ✅ |
 | [5. 工程化质量](#5-工程化质量) | 1/5 🚧 |
 | [6. 容器化与部署](#6-容器化与部署) | 0/4 ⬜ |
@@ -49,16 +49,16 @@
 
 ## 3. 前端业务
 
-> 现状：frontend 子项目存在 Vite + Vue 3 + TS 骨架，但业务页面未开始。
+> UI 框架：Naive UI。
 
-- ⬜ Axios 封装（请求拦截注入 JWT、响应拦截解包 `{ code, data, message }`）
-- ⬜ Pinia store + `pinia-plugin-persistedstate`（Token / 主题 / 语言持久化）
-- ⬜ Login / Register 页面
-- ⬜ TaskBoard / TaskList 视图（含状态、优先级筛选）
-- ⬜ TaskCard / StatusBadge 等展示组件
+- ✅ Axios 封装（请求拦截注入 JWT、响应拦截解包 `{ code, data, message }`） — 2026-05-25
+- ✅ Pinia store + `pinia-plugin-persistedstate`（Token 持久化） — 2026-05-25
+- ✅ Login / Register 页面 — 2026-05-25
+- ✅ TaskBoard / TaskList 视图（含状态、优先级筛选） — 2026-05-25
+- ✅ TaskCard / StatusBadge 等展示组件 — 2026-05-25
 - ⬜ 主题切换（CSS Variables + `data-theme` 切换）
 - ⬜ 多语言（vue-i18n，中英双语字典）
-- ⬜ 路由守卫（无 Token 跳转登录）
+- ✅ 路由守卫（无 Token 跳转登录） — 2026-05-25
 
 ## 4. 数据契约
 
@@ -109,7 +109,7 @@
 
 ## 优先级建议（个人项目视角）
 
-1. **P0**：前端 Axios 封装 + Login 页面 + TaskBoard —— 没有前端就跑不通端到端流程。
+1. **P0**：~~前端 Axios 封装 + Login 页面 + TaskBoard~~ —— 已完成（2026-05-25）。
 2. **P1**：~~根 `README.md`~~ —— 已完成（2026-05-25）。
 3. **P1**：`docker/{backend,frontend}.Dockerfile` —— PRD 明确要求容器化部署。
 4. **P2**：Husky + lint-staged —— 个人项目可以晚一点上，但越拖越乱。
