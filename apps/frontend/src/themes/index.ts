@@ -21,8 +21,7 @@ export const LIGHT_PALETTE = {
   info: '#4A6B5C',
   priorityHigh: '#8B2E2E',
   priorityMedium: '#B8884F',
-  priorityLow: '#4A6B5C',
-  shelfStripe: 'rgba(123, 85, 36, 0.18)'
+  priorityLow: '#4A6B5C'
 }
 
 // 「夜读书房」：烟熏胡桃木 + 烛光纸黄 + 绿绒
@@ -44,8 +43,7 @@ export const DARK_PALETTE = {
   info: '#9DB4B0',
   priorityHigh: '#C97373',
   priorityMedium: '#D4A65A',
-  priorityLow: '#7FA690',
-  shelfStripe: 'rgba(212, 166, 90, 0.22)'
+  priorityLow: '#7FA690'
 }
 
 export const lightThemeOverrides: GlobalThemeOverrides = {

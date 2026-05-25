@@ -8,7 +8,8 @@
     "dev:frontend": "pnpm --filter frontend dev",
     "dev:backend": "pnpm run build:shared && pnpm --filter backend start:dev",
     "build:frontend": "pnpm --filter frontend build",
-    "build:backend": "pnpm run build:shared && pnpm --filter backend build"
+    "build:backend": "pnpm run build:shared && pnpm --filter backend build",
+    "seed:tasks": "node scripts/seed-tasks.js"
   },
   "devDependencies": {
     "eslint": "^9.0.0",
