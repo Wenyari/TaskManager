@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { NCard, NTabs, NTabPane, NForm, NFormItem, NInput, NButton } from 'naive-ui'
 import { useUserStore } from '@/stores/user'
+import { useThemeStore } from '@/stores/theme'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const themeStore = useThemeStore()
 const router = useRouter()
 
 const activeTab = ref<'login' | 'register'>('login')
 const username = ref('')
 const password = ref('')
 const isSubmitting = ref(false)
+
+const themeIcon = computed(() => (themeStore.mode === 'dark' ? '☼' : '☾'))
 
 async function handleSubmit() {
   if (!username.value.trim() || !password.value) {
@@ -33,8 +37,11 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh">
-    <NCard style="width: 380px">
+  <div class="login-shell">
+    <button class="theme-toggle" :title="`切换主题`" @click="themeStore.toggle()">{{ themeIcon }}</button>
+    <NCard class="login-card">
+      <h1 class="brand">藏书阁</h1>
+      <p class="brand-sub">— Task Library —</p>
       <NTabs v-model:value="activeTab" type="segment" animated>
         <NTabPane name="login" tab="登录">
           <NForm @submit.prevent="handleSubmit">
@@ -62,3 +69,55 @@ async function handleSubmit() {
     </NCard>
   </div>
 </template>
+
+<style scoped>
+.login-shell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  position: relative;
+}
+
+.login-card {
+  width: 380px;
+  border: 1px solid var(--app-border);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.18);
+}
+
+.brand {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
+  font-size: 28px;
+  letter-spacing: 0.4em;
+  text-align: center;
+  margin: 0 0 4px;
+  color: var(--app-primary);
+}
+
+.brand-sub {
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 0.5em;
+  color: var(--app-text-tertiary);
+  margin: 0 0 18px;
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--app-border);
+  background: var(--app-bg-elevated);
+  color: var(--app-primary);
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+  transform: rotate(20deg);
+}
+</style>

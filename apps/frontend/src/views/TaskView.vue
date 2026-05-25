@@ -1,17 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, computed } from 'vue'
 import { NButton, NSpace, NSelect, NGrid, NGi, NEmpty, NSpin, NPageHeader } from 'naive-ui'
 import { TASK_STATUS, TASK_PRIORITY, useTaskStore } from '@/stores/task'
 import { useUserStore } from '@/stores/user'
+import { useThemeStore } from '@/stores/theme'
 import type { TaskItem, CreateTaskPayload } from '@/api/task'
 import TaskCard from '@/components/TaskCard.vue'
 import TaskFormModal from '@/components/TaskFormModal.vue'
 
 const userStore = useUserStore()
 const taskStore = useTaskStore()
+const themeStore = useThemeStore()
 
 const showModal = ref(false)
 const editingTask = ref<TaskItem | null>(null)
+
+const themeIcon = computed(() => (themeStore.mode === 'dark' ? '☼' : '☾'))
+const themeLabel = computed(() => (themeStore.mode === 'dark' ? '浅色' : '深色'))
 
 const statusOptions = [
   { label: '全部状态', value: null as unknown as string },
@@ -68,8 +73,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div style="max-width: 1200px; margin: 0 auto; padding: 24px">
-    <NPageHeader :title="`欢迎, ${userStore.username}`">
+  <div class="library-shell">
+    <NPageHeader :title="`${userStore.username}`" subtitle="">
       <template #extra>
         <NSpace>
           <NSelect
@@ -87,13 +92,19 @@ onMounted(() => {
             style="width: 130px"
           />
           <NButton type="primary" @click="handleCreate">新建任务</NButton>
+          <NButton quaternary :title="`切换到${themeLabel}模式`" @click="themeStore.toggle()">
+            {{ themeIcon }} {{ themeLabel }}
+          </NButton>
           <NButton quaternary @click="userStore.logout()">退出</NButton>
         </NSpace>
       </template>
     </NPageHeader>
 
     <NSpin :show="taskStore.isLoading" style="margin-top: 24px">
-      <NEmpty v-if="taskStore.tasks.length === 0 && !taskStore.isLoading" description="暂无任务，点击「新建任务」开始" />
+      <NEmpty
+        v-if="taskStore.tasks.length === 0 && !taskStore.isLoading"
+        description="点击「新建任务」添置"
+      />
       <NGrid v-else :x-gap="16" :y-gap="16" cols="1 s:2 m:3 l:4" responsive="screen">
         <NGi v-for="task in taskStore.tasks" :key="task._id">
           <TaskCard :task="task" @edit="handleEdit" @delete="handleDelete" @status-change="handleStatusChange" />
@@ -104,3 +115,22 @@ onMounted(() => {
     <TaskFormModal v-model:show="showModal" :editing-task="editingTask" @submit="handleFormSubmit" />
   </div>
 </template>
+
+<style scoped>
+.library-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.library-shell :deep(.n-page-header__title) {
+  font-family: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', Georgia, serif;
+  letter-spacing: 0.06em;
+}
+
+.library-shell :deep(.n-page-header__subtitle) {
+  color: var(--app-text-tertiary);
+  letter-spacing: 0.4em;
+  font-size: 12px;
+}
+</style>
