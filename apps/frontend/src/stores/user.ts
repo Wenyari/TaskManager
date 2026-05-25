@@ -28,7 +28,9 @@ export const useUserStore = defineStore(
       token.value = ''
       userId.value = ''
       username.value = ''
-      router.push({ name: 'login' })
+      if (router.currentRoute.value.name !== 'login') {
+        router.push({ name: 'login' })
+      }
     }
 
     return { token, userId, username, login, register, logout }

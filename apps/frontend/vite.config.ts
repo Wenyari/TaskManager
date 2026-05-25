@@ -8,7 +8,8 @@ export default defineConfig({
   plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@taskmanager/shared': fileURLToPath(new URL('../../packages/shared/index.ts', import.meta.url))
     }
   },
   server: {

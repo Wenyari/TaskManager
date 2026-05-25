@@ -111,6 +111,7 @@ pnpm dev:frontend
 | [`docs/requirements_analysis.md`](docs/requirements_analysis.md) | 需求分析（PRD） |
 | [`docs/project_design.md`](docs/project_design.md) | 总体架构与系统设计（V1.1） |
 | [`docs/backend_scaffold.md`](docs/backend_scaffold.md) | 后端脚手架详细设计（V1.0） |
+| [`docs/backend_concepts_qa.md`](docs/backend_concepts_qa.md) | 后端核心概念问答：DTO / Provider / JWT 鉴权 / 请求生命周期（V1.0） |
 | [`docs/decisions.md`](docs/decisions.md) | 关键决策与 bug 修复记录（ADR） |
 | [`TODO.md`](TODO.md) | 全项目 TODO 清单与进度 |
 

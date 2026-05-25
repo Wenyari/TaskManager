@@ -1,5 +1,5 @@
 import axios, { type AxiosResponse } from 'axios'
-import router from '@/router'
+import { useUserStore } from '@/stores/user'
 
 interface ApiResponse<T = unknown> {
   code: number
@@ -13,9 +13,9 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use(config => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+  const userStore = useUserStore()
+  if (userStore.token) {
+    config.headers.Authorization = `Bearer ${userStore.token}`
   }
   return config
 })
@@ -31,10 +31,8 @@ instance.interceptors.response.use(
   },
   error => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userId')
-      localStorage.removeItem('username')
-      router.push({ name: 'login' })
+      const userStore = useUserStore()
+      userStore.logout()
     }
     const message = error.response?.data?.message || error.message || '网络异常'
     window.$message?.error(message)
