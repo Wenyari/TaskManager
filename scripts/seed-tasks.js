@@ -2,7 +2,7 @@
 /**
  * 数据库 mock 数据脚本
  *
- * 往 MongoDB 的 tasks 集合插入约 20 条任务（图书馆主题，贴合前端书架风格）。
+ * 往 MongoDB 的 tasks 集合插入约 40 条任务（程序员日常主题，覆盖编码/评审/上线/会议/调研）。
  *
  * 用法：
  *   node scripts/seed-tasks.js                    # 给第一个用户插入
@@ -50,135 +50,333 @@ function daysFromNow(d) {
   return new Date(Date.now() + d * DAY)
 }
 
+// 程序员日常任务，覆盖：bug 修复 / 重构 / 调研 / 评审 / 会议 / 上线 / 文档 / 性能 / 安全
+// startDate / dueDate 故意混搭：部分任务只给 dueDate（甘特图退化单日点）、个别两者全无（"未排期"）
 const TASKS = [
+  // ─── 高优先级 / 进行中 ───
   {
-    title: '校对《百年孤独》新版翻译稿',
-    content: '重点比对第三章马孔多家族谱系的术语统一性，标注与旧版差异。',
+    title: '修复登录页 OAuth Google 回调 bug',
+    content: 'Chrome 117+ 上回调 URL 的 state 校验失败，复现率约 30%。',
     status: TASK_STATUS.IN_PROGRESS,
     priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(-3),
     dueDate: daysFromNow(2)
   },
   {
-    title: '整理本月新到馆书目',
-    content: '约 240 册，按文学/历史/科学三档分上架。',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.MEDIUM,
+    title: '处理 Sentry 上的 5 条线上报错',
+    content: '集中在 /task/get-list 接口，疑似 ObjectId 反序列化问题。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(-2),
     dueDate: daysFromNow(5)
   },
   {
-    title: '修补古籍《永乐大典》残页',
-    content: '与修复师约下周二上午开始，需提前准备宣纸与浆糊。',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.HIGH,
-    dueDate: daysFromNow(7)
-  },
-  {
-    title: '撰写读者推荐书单——夏季篇',
-    content: '主题：消暑随笔、山林游记。约 15 本，含简介。',
-    status: TASK_STATUS.IN_PROGRESS,
-    priority: TASK_PRIORITY.MEDIUM,
-    dueDate: daysFromNow(10)
-  },
-  {
-    title: '更新借阅卡过期名单',
-    status: TASK_STATUS.DONE,
-    priority: TASK_PRIORITY.LOW
-  },
-  {
-    title: '与王教授确认讲座流程',
-    content: '主题《<诗经>中的植物意象》，定于本月 28 日下午。',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.HIGH,
-    dueDate: daysFromNow(14)
-  },
-  {
-    title: '盘点善本室温湿度记录',
-    content: '近 30 天日志导出，确认温湿度未越界。',
-    status: TASK_STATUS.DONE,
-    priority: TASK_PRIORITY.MEDIUM
-  },
-  {
-    title: '回函澳大利亚国家图书馆交换协议',
-    content: '答复对方关于明清地方志副本交换的提案。',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.MEDIUM,
-    dueDate: daysFromNow(4)
-  },
-  {
-    title: '采购第二批镇纸与书签',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.LOW,
-    dueDate: daysFromNow(12)
-  },
-  {
-    title: '编订儿童阅读区主题日海报',
-    content: '本月主题"会说话的动物"，需绘制 3 张 A2 海报。',
-    status: TASK_STATUS.IN_PROGRESS,
-    priority: TASK_PRIORITY.LOW,
-    dueDate: daysFromNow(6)
-  },
-  {
-    title: '复核年度采购预算表',
-    content: '与财务对账，确认外文书与古籍专项额度。',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.HIGH,
-    dueDate: daysFromNow(3)
-  },
-  {
-    title: '为小学三年级团体导览备讲稿',
-    content: '40 分钟，重点放在装帧演变与活字印刷。',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.MEDIUM,
-    dueDate: daysFromNow(8)
-  },
-  {
-    title: '整理读者反馈意见汇总',
-    status: TASK_STATUS.DONE,
-    priority: TASK_PRIORITY.LOW
-  },
-  {
-    title: '调试期刊检索系统的搜索权重',
-    content: '近期反馈搜索"民国"召回率偏低，需调整 BM25 字段权重。',
+    title: '修复甘特图日期边界 off-by-one',
+    content: '跨月时偶发任务条左移一天，怀疑 timezone 处理问题。',
     status: TASK_STATUS.IN_PROGRESS,
     priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(-1),
     dueDate: daysFromNow(1)
   },
   {
-    title: '撰写《数字人文季报》卷首语',
-    status: TASK_STATUS.TODO,
-    priority: TASK_PRIORITY.MEDIUM,
-    dueDate: daysFromNow(20)
+    title: '修复 Safari 17 上 NDatePicker 错位',
+    content: '弹层 transform 与 -webkit-overflow-scrolling 冲突。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(0),
+    dueDate: daysFromNow(3)
   },
+
+  // ─── 高优先级 / 待办 ───
   {
-    title: '与志愿者团队复盘上月活动',
-    content: '"夜读马孔多"读书会，约 35 人参加。',
-    status: TASK_STATUS.DONE,
-    priority: TASK_PRIORITY.MEDIUM
-  },
-  {
-    title: '清查地下书库防潮设备',
-    content: '六台除湿机轮检，记录运行小时数。',
+    title: '优化首屏 LCP 至 2s 以内',
+    content: 'Lighthouse 当前 3.4s，重点：图片懒加载、字体预加载、route-level code splitting。',
     status: TASK_STATUS.TODO,
     priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(2),
     dueDate: daysFromNow(9)
   },
   {
-    title: '为《唐诗三百首》新译版撰写推介词',
-    status: TASK_STATUS.IN_PROGRESS,
-    priority: TASK_PRIORITY.LOW,
-    dueDate: daysFromNow(15)
+    title: '梳理 MongoDB 慢查询并补索引',
+    content: '近 7 天 slow log 共 12 条，集中在 tasks.find({ userId, status })。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(1),
+    dueDate: daysFromNow(5)
   },
   {
-    title: '替换二楼阅览室破损书架',
-    content: '老榆木的两组，与木工师傅约下周三上门。',
+    title: '与 DBA 复核 MongoDB 副本集配置',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(3),
+    dueDate: daysFromNow(4)
+  },
+  {
+    title: '与 SRE 演练数据库故障切换',
+    content: '模拟主库宕机，验证自动 failover 时长。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(7),
+    dueDate: daysFromNow(8)
+  },
+  {
+    title: '修复 SSE 长连接超时断流',
+    content: 'nginx 默认 60s 断开，需调 proxy_read_timeout 至 600s 并加 heartbeat。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.HIGH,
+    // 故意只给 dueDate，甘特图会渲染为单日圆点
+    dueDate: daysFromNow(12)
+  },
+
+  // ─── 高优先级 / 完成 ───
+  {
+    title: '修复登录后 token 续期失败',
+    content: '刷新 token 时 refresh 请求漏带 Authorization 头。',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.HIGH,
+    startDate: daysFromNow(-14),
+    dueDate: daysFromNow(-10)
+  },
+
+  // ─── 中优先级 / 进行中 ───
+  {
+    title: '接口契约同步到 Apifox',
+    content: '把 task / auth 接口录入 Apifox 并建立 mock。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-5),
+    dueDate: daysFromNow(4)
+  },
+  {
+    title: '与产品对齐任务管理 V2 PRD',
+    content: '重点讨论依赖关系、子任务、循环任务的数据模型。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-7),
+    dueDate: daysFromNow(7)
+  },
+  {
+    title: '整理后端 API 错误码规范',
+    content: '统一 4xx / 5xx 语义，补 i18n key。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-4),
+    dueDate: daysFromNow(6)
+  },
+
+  // ─── 中优先级 / 待办 ───
+  {
+    title: '重构用户模块至领域驱动结构',
+    content: '拆 entity / repository / service 三层，配合 V2 PRD。',
     status: TASK_STATUS.TODO,
     priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(5),
+    dueDate: daysFromNow(18)
+  },
+  {
+    title: '为 TaskService 补单元测试',
+    content: 'Jest，至少覆盖 update / delete 的异常分支。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(4),
+    dueDate: daysFromNow(10)
+  },
+  {
+    title: 'Docker 多阶段构建优化',
+    content: '把最终镜像压到 150MB 以内，分离 deps / build / runtime。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(8),
+    dueDate: daysFromNow(12)
+  },
+  {
+    title: '集成 vue-i18n 中英双语',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(10),
+    dueDate: daysFromNow(21)
+  },
+  {
+    title: '配置 GitHub Actions CI',
+    content: 'lint + type-check + build + test，PR 必跑。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(6),
     dueDate: daysFromNow(11)
   },
   {
-    title: '归档闭馆日清洁记录',
+    title: '编写 JWT 鉴权 e2e 测试',
+    content: 'supertest，包含 token 过期、被踢下线场景。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(11),
+    dueDate: daysFromNow(16)
+  },
+  {
+    title: '接入 OpenTelemetry 链路追踪',
+    content: '后端埋点 + 前端 Web Vitals 上报到 Tempo。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(14),
+    dueDate: daysFromNow(25)
+  },
+  {
+    title: '准备季度 OKR 述职材料',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    // 故意只给 dueDate
+    dueDate: daysFromNow(13)
+  },
+  {
+    title: '处理 dependabot 周报安全告警',
+    content: '本周 7 条，重点关注 lodash CVE-2024-xxxx。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(2),
+    dueDate: daysFromNow(6)
+  },
+  {
+    title: '优化打包体积，启用 Rollup 分包',
+    content: '把 naive-ui、@vicons 拆为独立 chunk。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(9),
+    dueDate: daysFromNow(17)
+  },
+  {
+    title: '编写 mongo backup 脚本',
+    content: '调用 mongodump，按日期归档，保留近 7 份。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(5),
+    dueDate: daysFromNow(9)
+  },
+  {
+    title: '完善 ESLint flat config',
+    content: '补 TypeScript / Vue / React 解析规则。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.MEDIUM
+    // 故意两个时间都不给，甘特图显示"未排期"
+  },
+
+  // ─── 中优先级 / 完成 ───
+  {
+    title: '升级 NestJS 11 至最新补丁版',
+    content: '11.0.x → 11.1.x，回归核心接口无回退。',
     status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-20),
+    dueDate: daysFromNow(-15)
+  },
+  {
+    title: '编写 README 部署章节',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-25),
+    dueDate: daysFromNow(-22)
+  },
+  {
+    title: '实现暗黑模式（CSS Variables）',
+    content: 'data-theme 切换 + localStorage 持久化。',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-18),
+    dueDate: daysFromNow(-8)
+  },
+  {
+    title: '面试候选人：前端 P6 二面',
+    content: '考察 Vue 响应式原理 + React Fiber 对比。',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.MEDIUM,
+    startDate: daysFromNow(-6),
+    dueDate: daysFromNow(-6)
+  },
+
+  // ─── 低优先级 / 进行中 ───
+  {
+    title: '重构 axios 重试逻辑',
+    content: '硬编码 3 次 → 指数退避，最多 5 次。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-2),
+    dueDate: daysFromNow(10)
+  },
+  {
+    title: '升级前端依赖至 Naive UI 最新版',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-1),
+    dueDate: daysFromNow(8)
+  },
+  {
+    title: '与设计师对齐图标库切换',
+    content: 'ionicons5 → tabler，评估视觉差异与替换工作量。',
+    status: TASK_STATUS.IN_PROGRESS,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-3),
+    dueDate: daysFromNow(14)
+  },
+
+  // ─── 低优先级 / 待办 ───
+  {
+    title: '调研 Bun 替换 Node 的可行性',
+    content: '主要看 NestJS / mongoose 生态兼容性。',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(15),
+    dueDate: daysFromNow(28)
+  },
+  {
+    title: '周会技术分享：Pinia vs createInjectionState',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(4),
+    dueDate: daysFromNow(5)
+  },
+  {
+    title: '调研 tRPC 替代 RESTful 的可行性',
+    status: TASK_STATUS.TODO,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(20),
+    dueDate: daysFromNow(32)
+  },
+  {
+    title: '写技术博客《从甘特图看任务建模》',
+    status: TASK_STATUS.TODO,
     priority: TASK_PRIORITY.LOW
+    // 故意两个时间都不给
+  },
+
+  // ─── 低优先级 / 完成 ───
+  {
+    title: '引入 lint-staged + husky',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-28),
+    dueDate: daysFromNow(-27)
+  },
+  {
+    title: '调整 axios 拦截器错误码映射',
+    content: '后端 401 时统一跳登录页。',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-12),
+    dueDate: daysFromNow(-10)
+  },
+  {
+    title: '整理本周代码评审意见',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-3),
+    dueDate: daysFromNow(-3)
+  },
+  {
+    title: '整理团队 OnCall 值班排期',
+    content: '6 月轮值表，已发周知。',
+    status: TASK_STATUS.DONE,
+    priority: TASK_PRIORITY.LOW,
+    startDate: daysFromNow(-16),
+    dueDate: daysFromNow(-14)
   }
 ]
 
@@ -215,6 +413,7 @@ async function main() {
     ...(t.content !== undefined && { content: t.content }),
     status: t.status,
     priority: t.priority,
+    ...(t.startDate !== undefined && { startDate: t.startDate }),
     ...(t.dueDate !== undefined && { dueDate: t.dueDate }),
     createdAt: now,
     updatedAt: now

@@ -28,5 +28,10 @@ export class UpdateTaskDto {
   @IsOptional()
   @Type(() => Date)
   @IsDate()
+  startDate?: Date
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
   dueDate?: Date
 }

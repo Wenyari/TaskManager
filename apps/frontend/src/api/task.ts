@@ -8,6 +8,7 @@ export interface TaskItem {
   content?: string
   status: TASK_STATUS
   priority: TASK_PRIORITY
+  startDate?: string
   dueDate?: string
   createdAt: string
   updatedAt: string
@@ -18,6 +19,7 @@ export interface CreateTaskPayload {
   content?: string
   status?: TASK_STATUS
   priority?: TASK_PRIORITY
+  startDate?: string
   dueDate?: string
 }
 
@@ -25,13 +27,8 @@ export interface UpdateTaskPayload extends Partial<CreateTaskPayload> {
   taskId: string
 }
 
-export interface QueryTaskPayload {
-  status?: TASK_STATUS
-  priority?: TASK_PRIORITY
-}
-
-export function getTaskList(filter: QueryTaskPayload): Promise<TaskItem[]> {
-  return post<TaskItem[]>('/task/get-list', filter as unknown as Record<string, unknown>)
+export function getTaskList(): Promise<TaskItem[]> {
+  return post<TaskItem[]>('/task/get-list', {})
 }
 
 export function createTask(payload: CreateTaskPayload): Promise<TaskItem> {

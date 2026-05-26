@@ -20,6 +20,9 @@ export class TaskDocument {
   priority: TASK_PRIORITY
 
   @Prop({ type: Date })
+  startDate?: Date
+
+  @Prop({ type: Date })
   dueDate?: Date
 
   createdAt: Date

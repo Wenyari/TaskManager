@@ -40,7 +40,7 @@ async function handleSubmit() {
   <div class="login-shell">
     <button class="theme-toggle" :title="`切换主题`" @click="themeStore.toggle()">{{ themeIcon }}</button>
     <NCard class="login-card">
-      <h1 class="brand">藏书阁</h1>
+      <h1 class="brand">任务管理</h1>
       <p class="brand-sub">— Task Library —</p>
       <NTabs v-model:value="activeTab" type="segment" animated>
         <NTabPane name="login" tab="登录">

@@ -18,10 +18,18 @@ const title = ref('')
 const content = ref('')
 const status = ref<TASK_STATUS>(TASK_STATUS.TODO)
 const priority = ref<TASK_PRIORITY>(TASK_PRIORITY.MEDIUM)
+const startDate = ref<number | null>(null)
 const dueDate = ref<number | null>(null)
 
 const isEdit = computed(() => !!props.editingTask)
 const modalTitle = computed(() => (isEdit.value ? '编辑任务' : '新建任务'))
+
+const dateRangeWarning = computed(() => {
+  if (startDate.value && dueDate.value && startDate.value > dueDate.value) {
+    return '开始日期晚于截止日期'
+  }
+  return ''
+})
 
 watch(
   () => props.show,
@@ -31,12 +39,14 @@ watch(
       content.value = props.editingTask.content || ''
       status.value = props.editingTask.status
       priority.value = props.editingTask.priority
+      startDate.value = props.editingTask.startDate ? new Date(props.editingTask.startDate).getTime() : null
       dueDate.value = props.editingTask.dueDate ? new Date(props.editingTask.dueDate).getTime() : null
     } else if (val) {
       title.value = ''
       content.value = ''
       status.value = TASK_STATUS.TODO
       priority.value = TASK_PRIORITY.MEDIUM
+      startDate.value = null
       dueDate.value = null
     }
   }
@@ -59,11 +69,16 @@ function handleSubmit() {
     window.$message?.warning('请输入任务标题')
     return
   }
+  if (dateRangeWarning.value) {
+    window.$message?.warning(dateRangeWarning.value)
+    return
+  }
   const payload: CreateTaskPayload & { taskId?: string } = {
     title: title.value.trim(),
     content: content.value.trim() || undefined,
     status: status.value,
     priority: priority.value,
+    startDate: startDate.value ? new Date(startDate.value).toISOString() : undefined,
     dueDate: dueDate.value ? new Date(dueDate.value).toISOString() : undefined
   }
   if (props.editingTask) {
@@ -89,7 +104,10 @@ function handleSubmit() {
       <NFormItem label="优先级">
         <NSelect v-model:value="priority" :options="priorityOptions" />
       </NFormItem>
-      <NFormItem label="截止日期">
+      <NFormItem label="开始日期">
+        <NDatePicker v-model:value="startDate" type="date" clearable style="width: 100%" />
+      </NFormItem>
+      <NFormItem label="截止日期" :feedback="dateRangeWarning" :validation-status="dateRangeWarning ? 'warning' : undefined">
         <NDatePicker v-model:value="dueDate" type="date" clearable style="width: 100%" />
       </NFormItem>
     </NForm>

@@ -17,5 +17,6 @@ export interface TaskDocument {
   createdAt: Date // 创建时间
   updatedAt: Date // 最后修改时间
   content?: string // 任务详细描述
-  dueDate?: Date // 期望截止日期
+  startDate?: Date // 计划开始日期（甘特图起点）
+  dueDate?: Date // 期望截止日期（甘特图终点）
 }

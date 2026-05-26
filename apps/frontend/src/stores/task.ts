@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref, reactive } from 'vue'
+import { ref } from 'vue'
 import { TASK_PRIORITY, TASK_STATUS } from '@taskmanager/shared'
 import {
   getTaskList,
@@ -13,34 +13,44 @@ import {
 
 export { TASK_STATUS, TASK_PRIORITY }
 
-export const useTaskStore = defineStore('task', () => {
-  const tasks = ref<TaskItem[]>([])
-  const isLoading = ref(false)
-  const filter = reactive<{ status?: TASK_STATUS; priority?: TASK_PRIORITY }>({})
+export type ViewMode = 'grid' | 'compact' | 'priority-group' | 'status-group' | 'gantt'
 
-  async function fetchList() {
-    isLoading.value = true
-    try {
-      tasks.value = await getTaskList(filter)
-    } finally {
-      isLoading.value = false
+export const useTaskStore = defineStore(
+  'task',
+  () => {
+    const tasks = ref<TaskItem[]>([])
+    const isLoading = ref(false)
+    const viewMode = ref<ViewMode>('grid')
+
+    async function fetchList() {
+      isLoading.value = true
+      try {
+        tasks.value = await getTaskList()
+      } finally {
+        isLoading.value = false
+      }
     }
-  }
 
-  async function createTask(payload: CreateTaskPayload) {
-    await apiCreate(payload)
-    await fetchList()
-  }
+    async function createTask(payload: CreateTaskPayload) {
+      await apiCreate(payload)
+      await fetchList()
+    }
 
-  async function updateTask(payload: UpdateTaskPayload) {
-    await apiUpdate(payload)
-    await fetchList()
-  }
+    async function updateTask(payload: UpdateTaskPayload) {
+      await apiUpdate(payload)
+      await fetchList()
+    }
 
-  async function deleteTask(taskId: string) {
-    await apiDelete(taskId)
-    await fetchList()
-  }
+    async function deleteTask(taskId: string) {
+      await apiDelete(taskId)
+      await fetchList()
+    }
 
-  return { tasks, isLoading, filter, fetchList, createTask, updateTask, deleteTask }
-})
+    function setViewMode(mode: ViewMode) {
+      viewMode.value = mode
+    }
+
+    return { tasks, isLoading, viewMode, fetchList, createTask, updateTask, deleteTask, setViewMode }
+  },
+  { persist: { pick: ['viewMode'] } }
+)
